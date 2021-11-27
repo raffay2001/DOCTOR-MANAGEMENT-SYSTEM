@@ -59,6 +59,8 @@ class Appointment(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     date = models.DateField()
     time = models.TimeField()
+    subject = models.CharField(max_length=50)
+    description = models.TextField(blank=True, null=True)
     status = models.IntegerField(default=0)
 
     def check_status(self):
