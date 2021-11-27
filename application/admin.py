@@ -59,7 +59,4 @@ admin.site.register(Social)
 admin.site.register(Doctor)
 admin.site.register(Patient)
 admin.site.register(Nurse)
-
-
-
-
+admin.site.register(Appointment)
