@@ -1,0 +1,19 @@
+{% extends 'inc/main_base.html' %}
+{% load static %}
+
+
+{% block content %}
+
+<div class="container-fluid">
+
+<div style="margin: 10rem 0 10rem 0;"  id="color-calendar"></div>
+
+</div>
+
+<script>
+    new Calendar({
+        id: '#color-calendar',
+    })
+</script>
+
+{% endblock %}
