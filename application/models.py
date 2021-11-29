@@ -21,6 +21,9 @@ class Clinic(models.Model):
     address = models.CharField(max_length=50)
     website_url = models.URLField()
 
+    def __str__(self):
+        return self.name
+
 # MODEL FOR SOCIAL LINKS 
 class Social(models.Model):
     facebook_url = models.URLField()
@@ -49,3 +52,22 @@ class Nurse(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     works_under = models.ForeignKey(Doctor, on_delete=models.CASCADE)
     clinic = models.ForeignKey(Clinic, on_delete=models.CASCADE)
+
+# MODEL FOR THE APPOINTMENT 
+class Appointment(models.Model):
+    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
+    date = models.DateField()
+    time = models.TimeField()
+    subject = models.CharField(max_length=50)
+    description = models.TextField(blank=True, null=True)
+    status = models.IntegerField(default=0)
+
+    def check_status(self):
+        if self.status == 0:
+            return f'Scheduled'
+        elif self.status == 1:
+            return f'Done'
+        elif self.status == -1:
+            return f'Delayed'
+
