@@ -28,8 +28,9 @@
                 <li><a class="nav-link scrollto" href="#about">About</a></li>
                 <li><a class="nav-link scrollto" href="#services">Services</a></li>
                 <li><a class="nav-link scrollto" href="#doctors">Doctors</a></li>
+                <li><a class="nav-link scrollto" href="{% url 'application:doctors' %}">All doctors</a></li>
                 <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
-                {% if flag %}
+                {% if user.is_authenticated %}
                 <li><a class="nav-link scrollto" href="{% url 'application:sign_out' %}">Log out</a></li>
                 {% else %}
                 <li><a class="nav-link scrollto" href="{% url 'application:sign_in' %}">Log in</a></li>
@@ -55,13 +56,17 @@
             </ul>
             <i class="bi bi-list mobile-nav-toggle"></i>
         </nav><!-- .navbar -->
-        {% if role == 'pt' %}
-        <a href="{% url 'application:doctors' %}" class="appointment-btn scrollto"><span class="d-none d-md-inline">All
-                Doctors</a>
-        {% endif %}
 
-        {% if role == 'dc' %}
-        <a href="{% url 'application:doctor_profile' %}" class="appointment-btn scrollto"><span class="d-none d-md-inline">View Profile</a>
+        {% if user.is_authenticated %}
+
+          {% if user.user_type == 'patient' %}
+          <a href="{% url 'application:doctors' %}" class="appointment-btn scrollto"><span class="d-none d-md-inline">View Profile</a>
+          {% endif %}
+
+          {% if user.user_type == 'doctor' %}
+          <a href="{% url 'application:profile' %}" class="appointment-btn scrollto"><span class="d-none d-md-inline">View Profile</a>
+          {% endif %}
+
         {% endif %}
 
     </div>

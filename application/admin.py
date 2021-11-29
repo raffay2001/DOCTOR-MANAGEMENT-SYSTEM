@@ -6,8 +6,7 @@ from django.contrib.auth.admin import UserAdmin
 # Register your models here.
 class CustomUserAdmin(UserAdmin):
     list_display = (
-        'email', 'first_name', 'last_name', 'is_staff',
-        'users'
+        'email', 'first_name', 'last_name', 'phone', 'is_staff', 'user_type', 'profile_picture'
     )
 
     fieldsets = (
@@ -15,7 +14,7 @@ class CustomUserAdmin(UserAdmin):
             'fields': ('username', 'password')
         }),
         ('Personal info', {
-            'fields': ('first_name', 'last_name', 'email')
+            'fields': ('first_name', 'last_name', 'email', 'phone')
         }),
         ('Permissions', {
             'fields': (
@@ -27,7 +26,7 @@ class CustomUserAdmin(UserAdmin):
             'fields': ('last_login', 'date_joined')
         }),
         ('Additional info', {
-            'fields': ('users', )
+            'fields': ('user_type', 'profile_picture')
         })
     )
 
@@ -36,7 +35,7 @@ class CustomUserAdmin(UserAdmin):
             'fields': ('username', 'password1', 'password2')
         }),
         ('Personal info', {
-            'fields': ('first_name', 'last_name', 'email')
+            'fields': ('first_name', 'last_name', 'email', 'phone')
         }),
         ('Permissions', {
             'fields': (
@@ -48,7 +47,7 @@ class CustomUserAdmin(UserAdmin):
             'fields': ('last_login', 'date_joined')
         }),
         ('Additional info', {
-            'fields': ('users',)
+            'fields': ('user_type', 'profile_picture')
         })
     )
 
@@ -59,7 +58,7 @@ admin.site.register(Social)
 admin.site.register(Doctor)
 admin.site.register(Patient)
 admin.site.register(Nurse)
-
-
+admin.site.register(Day)
+admin.site.register(Availability)
 
 

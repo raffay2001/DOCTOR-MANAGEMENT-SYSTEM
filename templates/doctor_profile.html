@@ -3,66 +3,254 @@
 
 {% block content %}
 
+
+    <!-- Button trigger modal -->
+    
+    
+  
+    <!-- Modal -->
+    <div class="modal fade" id="availability-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">${ get_current_step_name() }</h5>
+
+                <i class="material-icons mk-pointer cancel-button" id="modal-close"  data-dismiss="modal" aria-label="Close">clear</i>
+            
+            </div>
+    
+            <div class="modal-body">
+                <div style="min-height: 250px;" class="d-flex align-items-center justify-content-center">
+
+                   
+                   
+                    <div style="width:100%" class="text-center">
+                
+                        <div v-if="current_step == 1" class="row px-2 mt-2">
+                            <div v-for="duration in get_step_options(1)" class="col-sm-6 px-2 mb-3">
+                                <div v-on:click="select_option(1, duration)" class="border text-center radius-10 py-3 duration-option" :class="[compare_options(1, duration) ? 'duration-option-selected' : '']">
+                                    <img :src="'/static/assets/img/icons/' + duration + '.png'" class="mb-1" style="width: 30px;" alt="">
+                                    <div class="mt-2">${duration} minutes</div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div v-if="current_step == 2" class="px-2 mt-2 text-center">
+                            <div v-for="(option, index) in get_step_options(2)" style="width: 63px; float: left;" class="px-2 mb-3  text-center">
+                                <div v-on:click="select_option(2, index)" class="border text-center radius-10 py-2 duration-option" :class="[option.is_selected ? 'duration-option-selected' : '']">
+                                    <div>${option.text}</div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div v-if="current_step == 3" class="row px-2 mt-2">
+
+                            <div class="col-sm-6">
+                                <div class="form-group text-left">
+                                    <div class="d-flex justify-content-start">
+                                        Start time
+                                    </div>
+                                    <input type="time" v-model="steps[3].start_time" class="form-control mt-2" name="" id="">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <div class="form-group text-left">
+                                    <div class="d-flex justify-content-start">
+                                        End time
+                                    </div>
+                                    <input type="time" v-model="steps[3].end_time" class="form-control mt-2" name="" id="">
+                                </div>
+                            </div>
+
+                        
+                        </div>
+
+                        <div v-if="current_step == 4" class="row px-2 mt-2 text-left">
+
+                            <div class="col-sm-12">
+                                <h6 class="d-flex justify-content-start">
+                                    I'm available from <span class="badge badge-pill mx-2 badge-primary bg-scheduled mb-2">${ steps[3].start_time | tConvert }</span> 
+                                    to  <span class="badge badge-pill badge-primary  mx-2 bg-scheduled mb-2">${ steps[3].end_time | tConvert }</span> on folowing days:</h6>
+
+                                    <br>
+                                    
+                                    
+                                <div class="row px-2 mt-2 text-center">
+                                    <div v-for="(option, index) in get_step_options(2)" v-if="option.is_selected" class="px-2 col-sm-2 mb-3">
+                                        <div class="border text-center radius-10 py-2 duration-option">
+                                            <div>${option.text}</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <br>
+
+                                <h6 class="d-flex justify-content-start">
+                                    Each appointment is about <span class="badge badge-pill mx-2 badge-primary bg-scheduled mb-2">${ steps[1].selected } minutes</span> long</h6>
+
+                            </div>
+
+                            
+
+                        
+                        </div>
+                    </div>
+
+                
+
+                </div>
+
+
+                <div class="text-danger px-3">
+                    <p class="my-0 mb-2" v-for="error in get_errors()">${ error }</p>
+                </div>
+                
+          
+    
+        
+            </div>
+    
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" v-if="current_step > 1" v-on:click="go_back()">Back</button>
+
+                <button v-if="current_step == 4" type="button" class="btn btn-primary" v-on:click="save_details()">Save</button>
+                <button v-else type="button" class="btn btn-primary" v-on:click="go_next()">Next</button>
+                
+            </div>
+        </div>
+        </div>
+    </div>
+
+
     <!-- DOCTOR PROFILE SECTION  -->
-    <div class="container-fluid pt-5 mt-5 pb-5 mb-5">
+    <div class="container pt-5 mt-5 pb-5 mb-5">
         <div class="row pt-3 pb-3">
             <!-- Personal Info and Description Section  -->
             <div class="col-md-4 col-12 pt-2 pb-2">
                 <!-- Personal Info Section  -->
                 <div style="padding: 2rem 1rem 1rem 1rem;" class="row">
-                    <div class="border doc-info-head shadow col-md-12 col-12">
+                    <div class="border doc-info-head col-md-12 col-12 my-shadow">
                         <div class="d-flex justify-content-center p-1 doc-img">
-                            <img src="{% static 'assets/img/profile_pic_icon.jpg' %}" alt="profile-pic"
+                            <img src="media/{{ doctor.user.get_profile_picture }}" style="border-radius: 100%;" alt="profile-pic"
                                 class="doc-img img-fluid">
                         </div>
-                        <div class="p-2 doc-info">
-                            <div class="p-1">
-                                <h6><span style="font-weight: 600; color: #2c4964;">Specialization: </span>Chief Medical
-                                    Officer</h6>
-                            </div>
-                            <div class="p-2">
-                                <h6><span style="font-weight: 600; color: #2c4964;">Phone: </span>0313225489</h6>
-                            </div>
-                            <div class="p-2">
-                                <h6><span style="font-weight: 600; color: #2c4964;">Email: </span>test23@gmail.com</h6>
-                            </div>
+
+
+                        <div class="text-center my-0 mb-4">
+                            <h4>{{ doctor.user.get_full_name }}</h4>
+                            <h6>{{ doctor.designation }}</h6>
                         </div>
+
+                        <div class="my-3 px-2">
+                     
+                            <button 
+                                type="button" 
+                                name="" 
+                                id="" 
+                                data-toggle="modal"
+                                data-target="#availability-modal"
+                                class="btn btn-primary btn-block" 
+                                style="width: 100%;">
+                                {% if availability %}
+                                    Edit availability
+                                {% else %}
+                                    Set availability
+                                {% endif %}
+                            
+                            </button>
+                        </div>
+
+                        <hr class="mx-3">
+ 
+                        <div class="p-2 doc-info">
+                            {% for info in doctor.parameters %}
+
+                            <div class="p-1">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <h6><span style="font-weight: 600; color: #2c4964;">{{ info.0 }} </span></h6>
+                                    </div>
+
+                                    <div class="col-sm-6 d-flex justify-content-end">
+                                        <h6><span>{{ info.1 }}</span></h6>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {% endfor %}
+
+
+                            {% if doctor.social_links %}
+
+                            <div class="p-1">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <h6><span style="font-weight: 600; color: #2c4964;">Social links</span></h6>
+                                    </div>
+
+                                    <div class="col-sm-6 d-flex justify-content-end">
+                                        <div class="p-0">
+
+                                            <div class="d-none d-lg-flex social-links align-items-center">
+            
+                                                {% for social_link in doctor.social_links.get_list %}
+                                                <div class="mx-2">
+                                                    <a href="{{ social_link.1 }}" class="twitter" target="_blank"><i class="{{ social_link.0 }} ml-3"></i></a>
+                                                </div>
+                                                {% endfor %}
+                                              
+                                            </div>
+                                            <!-- <h6><span style="font-weight: 600; color: #2c4964;">Social Media Accounts: </span>
+                                                <div class="pt-3 social">
+                                                    <a style="padding: 5px 7px 0px 7px;" class="social-icons"
+                                                        href="https://www.twitter.com" target="_blank"><i
+                                                            class="ri-twitter-fill"></i></a>
+                                                    <a style="padding: 5px 7px 0px 7px;" class="social-icons"
+                                                        href="https://www.facebook.com" target="_blank"><i
+                                                            class="ri-facebook-fill"></i></a>
+                                                    <a style="padding: 5px 7px 0px 7px;" class="social-icons"
+                                                        href="https://www.instagram.com" target="_blank"><i
+                                                            class="ri-instagram-fill"></i></a>
+                                                    <a style="padding: 5px 7px 0px 7px;" class="social-icons"
+                                                        href="https://www.linkedin.com" target="_blank"> <i
+                                                            class="ri-linkedin-box-fill"></i> </a>
+                                                </div>
+                                            </h6> -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                           
+                            {% endif %}
+
+                            
+                           
+                        </div>
+
+                      
+
+
                     </div>
                 </div>
 
                 <!-- Description Section -->
                 <div style="padding: 1rem 1rem 2rem 1rem;" class="row">
-                    <div class="border doc-desc-head shadow col-md-12 col-12">
+                    <div class="border doc-desc-head col-md-12 col-12 my-shadow">
                         <div class="p-1 doc-info">
                             <div class="mt-3 p-2">
-                                <h6><span style="font-weight: 600; color: #2c4964;">Description: </span>Lorem ipsum
-                                    dolor
-                                    sit amet consectetur adipisicing elit. Unde cumque perferendis nulla pariatur eum ad
-                                    recusandae incidunt impedit! Ipsam officia at vero maxime culpa, voluptates repellat
-                                    quas numquam debitis aperiam!</h6>
+                                <h5>Description</h5>
+                                <h6>{{ doctor.description }}</h6>
                             </div>
-                            <div class="p-2">
-                                <h6><span style="font-weight: 600; color: #2c4964;">Clinic: </span>Micheal Clinic, DHA
-                                    Karachi</h6>
+
+
+                            <div class="mt-3 p-2">
+                                <h5>Clinic</h5>
+                                <h6>{{ doctor.clinic.name }}, <br>{{ doctor.clinic.address }}</h6>
                             </div>
-                            <div class="p-2">
-                                <h6><span style="font-weight: 600; color: #2c4964;">Social Media Accounts: </span>
-                                    <div class="pt-3 social">
-                                        <a style="padding: 5px 7px 0px 7px;" class="social-icons"
-                                            href="https://www.twitter.com" target="_blank"><i
-                                                class="ri-twitter-fill"></i></a>
-                                        <a style="padding: 5px 7px 0px 7px;" class="social-icons"
-                                            href="https://www.facebook.com" target="_blank"><i
-                                                class="ri-facebook-fill"></i></a>
-                                        <a style="padding: 5px 7px 0px 7px;" class="social-icons"
-                                            href="https://www.instagram.com" target="_blank"><i
-                                                class="ri-instagram-fill"></i></a>
-                                        <a style="padding: 5px 7px 0px 7px;" class="social-icons"
-                                            href="https://www.linkedin.com" target="_blank"> <i
-                                                class="ri-linkedin-box-fill"></i> </a>
-                                    </div>
-                                </h6>
-                            </div>
+   
                         </div>
                     </div>
                 </div>
@@ -71,17 +259,33 @@
 
             <!-- Appointments Section  -->
             <div class="col-md-8 col-12 pt-2 pb-2">
-                <div style="padding: 2rem 1rem 1rem 1rem;" class="row">
-                    <div class="border doc-desc-head shadow col-md-12 col-12">
+                <div class="row mt-3">
+                    <div class="doc-desc-head col-md-12 col-12">
                         <div class="p-1 doc-info">
-                            <div class="p-2">
-                                <h3 style="font-weight: 700; font-family: 'Poppins'; color: #2c4964;"
-                                    class="text-center">
-                                    Your Appointements</h3>
+                            <div class="row mt-3">
+                                <div class="col-sm-6">
+                                    <div>
+                                        <h4 class="my-0" style="color: #2c4964;">
+                                            Your Appointements</h4>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6 d-flex justify-content-end align-items-center">
+                                   
+                                    <div class="form-group">
+                                      <select class="form-control" name="" id="">
+                                        <option value="0">Scheduled</option>
+                                        <option value="1">Completed</option>
+                                        <option value="2">Delay</option>
+                                      </select>
+                                    </div>
+                                </div>
                             </div>
 
-                            <div class="p-2">
-                                <div style="border-radius: 12px;" class="border row appointment">
+                           
+
+                            <div class="p-2 mt-3">
+                                <div style="border-radius: 12px;" class="border my-shadow row appointment mb-4">
 
                                     <div class="d-flex align-items-center col-md-6 col-12 p-1">
                                         <div class="p-1">
@@ -90,21 +294,38 @@
                                         </div>
 
                                         <div class="p-1">
-                                            <h6 class="p-0 m-0">Micheal Ducket</h6>
-                                            <h6 class="p-0 m-0">03125465489</h6>
+                                            <h5 class="p-0 m-0 mb-2 text-primary">Micheal Ducket</h5>
+                                            <h6 class="p-0 m-0 d-flex align-items-center" style="font-family:verdana; font-size:15px;">
+                                                <i class="material-icons mr-3"  style="font-size:15px;">phone</i>
+                                                &nbsp;03125465489
+                                            </h6>
                                         </div>
 
                                     </div>
 
-                                    <div class="d-flex flex-column justify-content-center col-md-6 col-12 p-1">
-                                        <div class="p-0">
+
+                                    <div class="d-flex align-items-center col-md-3 col-12 p-1">
+                                        <div>
+                                            <span class="badge badge-pill badge-primary bg-late mb-2">Delayed</span>  <br>
+                                            May 07, 2021 -
+                                            06:03 pm
+                                        </div>
+                                       
+
+                                        
+
+                                    </div>
+
+
+                                    <div class="d-flex justify-content-end col-md-3 col-12">
+                                        <!-- <div class="p-0">
                                             <h5 style="color: #2c4964; font-weight: 600;" class="p-0 m-0">Appointement
                                                 Status</h5>
-                                        </div>
+                                        </div> -->
 
-                                        <div style="margin-right: 2rem;" class="pt-2 btn-group" role="group"
+                                        <div class="btn-group" role="group"
                                             aria-label="Basic outlined example">
-                                            <button type="button" class="btn btn-outline-secondary">Mark as
+                                            <button type="button" class="btn btn-outline-primary">Mark as
                                                 Done</button>
                                             <!-- <button type="button" class="btn btn-outline-secondary">Delayed</button>
                                             <button type="button" class="btn btn-outline-secondary">Right</button> -->
@@ -112,6 +333,106 @@
                                     </div>
 
                                 </div>
+
+                                <div style="border-radius: 12px;" class="border my-shadow row appointment mb-4">
+
+                                    <div class="d-flex align-items-center col-md-6 col-12 p-1">
+                                        <div class="p-1">
+                                            <img src="{% static 'assets/img/profile_pic_icon.jpg' %}" alt="profile-pic"
+                                                class="pat-img img-fluid">
+                                        </div>
+
+                                        <div class="p-1">
+                                            <h5 class="p-0 m-0 mb-2 text-primary">Micheal Ducket</h5>
+                                            <h6 class="p-0 m-0 d-flex align-items-center" style="font-family:verdana; font-size:15px;">
+                                                <i class="material-icons mr-3"  style="font-size:15px;">phone</i>
+                                                &nbsp;03125465489
+                                            </h6>
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="d-flex align-items-center col-md-3 col-12 p-1">
+                                        <div>
+                                            <span class="badge badge-pill badge-primary bg-scheduled mb-2">Scheduled</span>  <br>
+                                            May 07, 2021 -
+                                            06:03 pm
+                                        </div>
+                                       
+
+                                        
+
+                                    </div>
+
+
+                                    <div class="d-flex justify-content-end col-md-3 col-12">
+                                        <!-- <div class="p-0">
+                                            <h5 style="color: #2c4964; font-weight: 600;" class="p-0 m-0">Appointement
+                                                Status</h5>
+                                        </div> -->
+
+                                        <div class="btn-group" role="group"
+                                            aria-label="Basic outlined example">
+                                            <button type="button" class="btn btn-outline-primary">Mark as
+                                                Done</button>
+                                            <!-- <button type="button" class="btn btn-outline-secondary">Delayed</button>
+                                            <button type="button" class="btn btn-outline-secondary">Right</button> -->
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+                                <div style="border-radius: 12px;" class="border my-shadow row appointment mb-4">
+
+                                    <div class="d-flex align-items-center col-md-6 col-12 p-1">
+                                        <div class="p-1">
+                                            <img src="{% static 'assets/img/profile_pic_icon.jpg' %}" alt="profile-pic"
+                                                class="pat-img img-fluid">
+                                        </div>
+
+                                        <div class="p-1">
+                                            <h5 class="p-0 m-0 mb-2 text-primary">Micheal Ducket</h5>
+                                            <h6 class="p-0 m-0 d-flex align-items-center" style="font-family:verdana; font-size:15px;">
+                                                <i class="material-icons mr-3"  style="font-size:15px;">phone</i>
+                                                &nbsp;03125465489
+                                            </h6>
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="d-flex align-items-center col-md-3 col-12 p-1">
+                                        <div>
+                                            <span class="badge badge-pill badge-primary bg-scheduled mb-2">Scheduled</span>  <br>
+                                            May 07, 2021 -
+                                            06:03 pm
+                                        </div>
+                                       
+
+                                        
+
+                                    </div>
+
+
+                                    <div class="d-flex justify-content-end col-md-3 col-12">
+                                        <!-- <div class="p-0">
+                                            <h5 style="color: #2c4964; font-weight: 600;" class="p-0 m-0">Appointement
+                                                Status</h5>
+                                        </div> -->
+
+                                        <div class="btn-group" role="group"
+                                            aria-label="Basic outlined example">
+                                            <button type="button" class="btn btn-outline-primary">Mark as
+                                                Done</button>
+                                            <!-- <button type="button" class="btn btn-outline-secondary">Delayed</button>
+                                            <button type="button" class="btn btn-outline-secondary">Right</button> -->
+                                        </div>
+                                    </div>
+
+                                </div>
+                                
                             </div>
 
                         </div>
@@ -120,5 +441,277 @@
             </div>
         </div>
     </div>
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script>
+
+
+        var steps_attr = {
+            1: {
+                id: 1,
+                name: 'Select appointment duration',
+                options: [60, 15, 45, 30],
+                selected: null
+            },
+            2: {
+                id: 2,
+                name: 'Select days',
+                options: [
+                    {
+                        text:'Mon',
+                        is_selected: false,
+                    },
+                    {
+                        text:'Tue', 
+                        is_selected: false,
+                    }, 
+                    {                               
+                        text:'Wed',
+                        is_selected: false,
+                    },
+                    {                                
+                        text:'Thu', 
+                        is_selected: false,
+                    }, 
+                    {                               
+                        text:'Fri', 
+                        is_selected: false,
+                    },
+                    {
+                        text: 'Sat',
+                        is_selected: false
+                    },
+                    {
+                        text: 'Sun',
+                        is_selected: false
+                    }
+                ],
+                selected: null
+            },
+            3: {
+                id: 3,
+                name: 'Select timings',
+                selected: null,
+                start_time: null,
+                end_time: null
+            },
+            4: {
+                id: 4,
+                name: 'Summary',
+            }
+        }
+
+
+        let availability = "{{ availability }}";
+
+        if(availability != "None"){
+            console.log("Do this");
+            steps_attr[1].selected = parseInt("{{ availability.duration }}");
+            steps_attr[3].start_time = "{{ availability.get_start_time }}";
+            steps_attr[3].end_time = "{{ availability.get_end_time }}";
+            selected_days = JSON.parse('{{ availability.get_days_list | safe }}');
+
+            let step_2_options = steps_attr[2].options;
+            for (let i = 0; i < step_2_options.length; i++) {
+                let day_option = step_2_options[i];
+                if (selected_days.includes(day_option.text)) {
+                    steps_attr[2].options[i].is_selected = true
+                }
+            }
+            
+        }
+                
+        var my_app = new Vue({
+            el: '#availability-modal',
+            delimiters: ['${', '}'],
+            data: {
+                current_step: 1,
+                steps: steps_attr,
+                errors: {
+                    1: {
+                        feedback: "Kindly complete the duration selection first!",
+                        to_show: false
+                    },
+                    2: {
+                        feedback: "Kindly complete the days selection first!",
+                        to_show: false
+                    },
+                    3: {
+                        feedback: "Kindly complete the time selection first!",
+                        to_show: false
+                    },
+                }
+            },
+
+            methods: {
+                get_step_options: function (step_id) {
+                    return this.steps[step_id].options;
+                },
+
+                select_option: function (step_id, option) {
+                    if (step_id == 1) {
+                        this.steps[step_id].selected = option;
+                        this.errors[step_id].to_show = false;                        
+                    }
+                    if (step_id == 2) {
+                        let previous_value = this.steps[2].options[option].is_selected;
+                        let new_value = !(previous_value);
+                        this.steps[2].options[option].is_selected = new_value;
+                        if (new_value) {
+                            this.errors[step_id].to_show = false;
+                        }
+                    }
+
+                },
+
+                compare_options: function(step_id, option) {
+                    return this.steps[step_id].selected == option;
+                },
+
+                get_current_step_name: function() {
+                    return this.steps[this.current_step].name;
+                },
+
+                get_errors: function(){
+                    let error_list = [];
+                    for (const error in this.errors) {
+                        if (this.errors.hasOwnProperty(error)) {
+                            const element = this.errors[error];
+                            if (element.to_show) {
+                                error_list.push(element.feedback);
+                            }                            
+                        }
+                    }
+                    return error_list;
+                },
+
+                go_next: function(){
+
+                    if (this.current_step == 1) {
+                        if (this.steps[this.current_step].selected != null) {
+                            this.errors[this.current_step].to_show = false;
+                            this.current_step +=  1;
+                        }else{
+                            this.errors[this.current_step].to_show = true;
+                        }
+                        return;
+                    }
+
+                    if (this.current_step == 2) {
+                        let options = this.steps[this.current_step].options;
+                        for (let i = 0; i < options.length; i++) {
+                            const element = options[i];
+                            if (element.is_selected) {
+                                this.errors[this.current_step].to_show = false;
+                                this.current_step +=  1;
+                                return;
+                            }
+                        }
+                        this.errors[this.current_step].to_show = true;
+                    }
+
+                    if (this.current_step == 3) {
+                        let main_step = this.steps[this.current_step];
+                        if (main_step.start_time && main_step.end_time) {
+                            this.errors[this.current_step].to_show = false;
+
+                            console.log(main_step.end_time > main_step.start_time);
+
+                            if (main_step.end_time > main_step.start_time) {
+                                this.current_step += 1
+                            }else{
+                                this.errors[this.current_step].feedback = "End time should be ahead of start time!";
+                                this.errors[this.current_step].to_show = true;
+                            }
+
+
+                        }else{
+                            this.errors[this.current_step].feedback = "Kindly complete the time selection first!";
+                            this.errors[this.current_step].to_show = true;
+                        }
+
+
+                    }
+
+                },
+
+                go_back: function(){
+                    if (this.current_step > 1) {
+                        this.current_step -= 1;
+                    }
+                },
+
+                save_details: function () {
+                    console.log("abc");
+                    let duration = this.steps[1].selected;
+                    let days = [];
+                    let start_time = this.steps[3].start_time;
+                    let end_time = this.steps[3].end_time;
+
+                    let days_options = this.steps[2].options;
+                    for (let i = 0; i < days_options.length; i++) {
+                        const element = days_options[i];
+                        if (element.is_selected) {
+                            days.push(element.text)
+                        }
+                    }  
+
+
+                    console.log(duration);
+                    console.log(days);
+                    console.log(start_time);
+                    console.log(end_time);
+
+                    days = JSON.stringify(days);
+
+                    $.ajax({
+                        url: "{% url 'application:save_availability' %}",
+                        type: "GET",
+                        data: {
+                            duration: duration,
+                            days: days,
+                            start_time: start_time,
+                            end_time: end_time,                            
+                        },
+                        success: (response)=>{
+                            $("#availability-modal").modal("hide");
+                            $("#modal-close").click();
+                            alert(response.message);
+
+                        }
+                    })
+                    
+
+                },
+
+                
+            },
+
+            filters: {
+                tConvert: function(time) {
+                    // Check correct time format and split into components
+                    time = time.toString ().match (/^([01]\d|2[0-3])(:)([0-5]\d)(:[0-5]\d)?$/) || [time];
+
+                    if (time.length > 1) { // If time format correct
+                        time = time.slice (1);  // Remove full string match value
+                        time[5] = +time[0] < 12 ? 'AM' : 'PM'; // Set AM/PM
+                        time[0] = +time[0] % 12 || 12; // Adjust hours
+                    }
+                    return time.join (' '); // return adjusted time or original string
+                }
+            }
+        });
+
+        $("#modal-close").on("click", function () {
+            $("#availability-modal").modal("hide");            
+        })
+
+        
+    </script>
 
 {% endblock %}
