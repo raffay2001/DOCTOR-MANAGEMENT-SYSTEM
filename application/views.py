@@ -107,14 +107,14 @@ def doctor_profile(request):
 
 # FUNCTION FOR THE APPOINTMENTS PAGE 
 def appointments(request):
-    if request.user.is_authenticated:
-        context = {
-            'flag': True,
-            'role': request.user.users,
-        }
-    else:
-        context = {
-            'flag': False,
-            'role': False,
-        }
+    # if request.user.is_authenticated:
+    #     context = {
+    #         'flag': True,
+    #         'role': request.user.users,
+    #     }
+    # else:
+    #     context = {
+    #         'flag': False,
+    #         'role': False,
+    #     }
     return render(request, 'appointments.html')
