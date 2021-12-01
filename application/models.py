@@ -73,6 +73,11 @@ class Availability(models.Model):
         day_list = self.days.values_list('key', flat=True)
         day_list = list(day_list)
         return json.dumps(day_list)
+    
+    def get_days_list_py(self):
+        day_list = self.days.values_list('key', flat=True)
+        day_list = list(day_list)
+        return day_list
 
 
 # MODEL FOR CLINIC 

@@ -7,6 +7,7 @@ from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from application.models import *
 import json
+from datetime import datetime, timedelta
 
 
 # Create your views here.
@@ -57,6 +58,31 @@ def save_availability(request):
     return JsonResponse(output)
 
 
+def hours_format(value):
+    return value.strftime("%I:%M %p")
+
+
+
+def get_slots(start_time, end_time, duration):
+    slots_list = []
+
+    new_start_time = datetime(2001, 1, 1, start_time.hour, start_time.minute)
+    new_end_time = datetime(2001, 1, 1, end_time.hour, end_time.minute)
+
+    slots_list.append(hours_format(new_start_time.time()))
+
+    while new_start_time < new_end_time:
+        new_start_time = new_start_time + timedelta(minutes=duration)
+        if new_start_time + timedelta(minutes=duration) <= new_end_time:
+            # slots_list.append(new_start_time.time())
+            slots_list.append(hours_format(new_start_time.time()))
+
+    return slots_list
+    # print(new_start_time < new_end_time)
+    # print(start_time + timedelta(minutes=duration))
+    # print(start_time.hour, type(end_time), duration)
+
+
 # FUCNTION FOR THE PROFILE PAGE OF THE DOCTOR 
 @login_required
 def profile(request):
@@ -68,7 +94,31 @@ def profile(request):
     filter_query = Availability.objects.filter(user = request.user)
     
     if filter_query.exists():
-        context['availability'] = filter_query[0]
+        availability = filter_query[0]
+
+        all_week_slots = []
+        days_list = availability.get_days_list_py()
+        slots_list = get_slots(availability.start_time, availability.end_time, availability.duration)
+        availability_slots = {
+            "Wed": [],
+            "Thu": [],
+            "Fri": [],
+            "Sat": [],
+            "Sun": [],
+            "Mon": [],
+            "Tue": [],
+        }
+
+        for day in days_list:
+            availability_slots[day] = slots_list
+        
+        for day, slots in availability_slots.items():
+            print(slots)
+            all_week_slots.append(slots)
+
+        # print(all_week_slots)
+        context['all_week_slots'] = json.dumps(all_week_slots)
+        context['availability'] = availability
 
     print(context['doctor'].social_links.get_list())
     return render(request, 'doctor_profile.html', context)
@@ -138,5 +188,8 @@ def sign_out(request):
 
 # FUNCTION FOR ALL DOCTORS PAGE 
 def doctors(request):
-    return render(request, 'doctors.html')
+    context = {}
+    all_doctors = Doctor.objects.all()
+    context['doctors'] = all_doctors
+    return render(request, 'doctors.html', context)
 

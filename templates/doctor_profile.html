@@ -5,7 +5,38 @@
 
 
     <!-- Button trigger modal -->
-    
+    <div class="modal fade" id="view-modal">
+        <div class="modal-dialog modal-xl">
+          <div class="modal-content">
+          
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h4 class="modal-title">Your availability</h4>
+              <i class="material-icons mk-pointer cancel-button" data-dismiss="modal" aria-label="Close">clear</i>
+              <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+            </div>
+            
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="border my-shadow p-3 m-0 radius-10">
+                            <div id="picker"></div>
+                        </div>          
+                    </div>
+                </div>
+              
+                <br>
+            </div>
+            
+            <!-- Modal footer -->
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+            
+          </div>
+        </div>
+      </div>
     
   
     <!-- Modal -->
@@ -145,22 +176,67 @@
                         </div>
 
                         <div class="my-3 px-2">
+                            <div class="row px-2">
+
+
+                            {% if availability %}
+                                <div class="col-sm-6 px-2">
+                                    <button 
+                                        type="button" 
+                                        name="" 
+                                        id="" 
+                                        data-toggle="modal"
+                                        data-target="#availability-modal"
+                                        class="btn btn-outline-primary btn-block" 
+                                        style="width: 100%;">
+                                    
+                                            Edit availability
+                                    
+                                    </button>
+                                </div>
+
+
+                                <div class="col-sm-6 px-2">
+                                    <button 
+                                        type="button" 
+                                        name="" 
+                                        id="" 
+                                        data-toggle="modal"
+                                        data-target="#view-modal"
+                                        class="btn btn-primary btn-block" 
+                                        style="width: 100%;">
+                                    
+                                            View availability
+                                    
+                                    </button>
+                                </div>
+
+                            {% else %}
+
+                           
+                                <div class="col-sm-12 px-2">
+                                    <button 
+                                        type="button" 
+                                        name="" 
+                                        id="" 
+                                        data-toggle="modal"
+                                        data-target="#availability-modal"
+                                        class="btn btn-outline-primary btn-block" 
+                                        style="width: 100%;">
+                                    
+                                        Set availability                                    
+                                    </button>
+                                </div>
+
+
+
+                            {% endif %}
+    
+                            </div>
+
+
                      
-                            <button 
-                                type="button" 
-                                name="" 
-                                id="" 
-                                data-toggle="modal"
-                                data-target="#availability-modal"
-                                class="btn btn-primary btn-block" 
-                                style="width: 100%;">
-                                {% if availability %}
-                                    Edit availability
-                                {% else %}
-                                    Set availability
-                                {% endif %}
-                            
-                            </button>
+
                         </div>
 
                         <hr class="mx-3">
@@ -286,9 +362,8 @@
 
                             <div class="p-2 mt-3">
                                 
-                                <div style="margin: 10rem 0 10rem 0;"  id="color-calendar"></div>
-                                
-                                    
+                                <!-- <div style="margin: 10rem 0 10rem 0;"  id="color-calendar"></div> -->
+                             
     
                                 <div style="border-radius: 12px;" class="border my-shadow row appointment mb-4">
 
@@ -448,19 +523,33 @@
     </div>
 
 
-    <script>
-        new Calendar({
-            id: '#color-calendar',
-        })
-    </script>
+
 
 
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="{% static 'assets/calendar/js/mark-your-calendar.js' %}"></script>
+
+    
+
 
     <script>
+        var selected_appointment = {}
+        var avail = [
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+            []
+        ];
+        var start_time = null;
+        var end_time = null;
+        var duration = 0;
+        let availability = "{{ availability }}";
 
-
+  
         var steps_attr = {
             1: {
                 id: 1,
@@ -517,14 +606,61 @@
         }
 
 
-        let availability = "{{ availability }}";
+      
+        function tConvert(time) {
+            // Check correct time format and split into components
+            time = time.toString ().match (/^([01]\d|2[0-3])(:)([0-5]\d)(:[0-5]\d)?$/) || [time];
+
+            if (time.length > 1) { // If time format correct
+                time = time.slice (1);  // Remove full string match value
+                time[5] = +time[0] < 12 ? ' AM' : ' PM'; // Set AM/PM
+                time[0] = +time[0] % 12 || 12; // Adjust hours
+            }
+            return time.join(''); // return adjusted time or original string
+        }
+
+
 
         if(availability != "None"){
-            console.log("Do this");
-            steps_attr[1].selected = parseInt("{{ availability.duration }}");
-            steps_attr[3].start_time = "{{ availability.get_start_time }}";
-            steps_attr[3].end_time = "{{ availability.get_end_time }}";
+
+            steps_attr[1].selected = duration = parseInt("{{ availability.duration }}");
+            steps_attr[3].start_time = start_time = "{{ availability.get_start_time }}";
+            steps_attr[3].end_time = end_time = "{{ availability.get_end_time }}";
             selected_days = JSON.parse('{{ availability.get_days_list | safe }}');
+            all_week_slots = JSON.parse('{{ all_week_slots | safe }}');
+
+            // get_slots(start_time, end_time, duration);
+            // console.log(all_week_slots);
+            avail = all_week_slots;
+
+            // Generate calendar
+            (function($) {
+
+            // console.log(avail);
+
+            $('#picker').markyourcalendar({
+                availability: avail,
+                startDate: new Date(),
+                // onClick: function(ev, data) {
+                //     // data is a list of datetimes
+                //     console.log(data);
+                //     if (data.length > 0) {
+                //         var d = data[0].split(' ')[0];
+                //         var t = data[0].split(' ')[1];
+                //         var am_pm = data[0].split(' ')[2];
+                //         console.log(d);
+                //         console.log(t);
+                //         console.log(am_pm);
+                //         $('#selected-date').html(d);
+                //         $('#selected-time').html(t);
+                //     }  
+                // },
+                onClickNavigator: function(ev, instance) {
+                    instance.setAvailability(avail);
+                }
+                });
+            })(jQuery);
+
 
             let step_2_options = steps_attr[2].options;
             for (let i = 0; i < step_2_options.length; i++) {
@@ -533,8 +669,12 @@
                     steps_attr[2].options[i].is_selected = true
                 }
             }
+
+
             
         }
+
+
                 
         var my_app = new Vue({
             el: '#availability-modal',
@@ -692,6 +832,9 @@
                             $("#availability-modal").modal("hide");
                             $("#modal-close").click();
                             alert(response.message);
+                            setTimeout(() => {
+                                location.reload();
+                            }, 1000);
 
                         }
                     })
@@ -719,7 +862,16 @@
 
         $("#modal-close").on("click", function () {
             $("#availability-modal").modal("hide");            
-        })
+        });
+
+
+
+    
+ 
+    
+
+
+
 
         
     </script>
