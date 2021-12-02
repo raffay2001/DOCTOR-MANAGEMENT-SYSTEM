@@ -10,8 +10,10 @@ urlpatterns = [
     path('sign-in/', views.sign_in, name="sign_in"),
     path('sign-out', views.sign_out, name='sign_out'),
     path('doctors/', views.doctors, name='doctors'),
+    path('doctor/<doctor_id>', views.single_doctor, name='doctor'),
     path('profile', views.profile, name='profile'),
-    path('save_availability', views.save_availability, name="save_availability")
+    path('save_availability', views.save_availability, name="save_availability"),
+    path('confirm_appointment', views.confirm_appointment, name="confirm_appointment")
 ]
 
 

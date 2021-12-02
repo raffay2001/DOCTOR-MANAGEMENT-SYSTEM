@@ -35,6 +35,7 @@
           <label class="info-title" for="exampleInputEmail1">Email
             Address <span>*</span></label>
           <p>
+            <input type="hidden" name="username" id="id_username">
             {{ form.email }}
           </p>
         </div>
@@ -91,6 +92,12 @@
 <script>
   $("#id_phone").val("");
   $("#id_last_name, #id_first_name").prop("required", true);
+  document.getElementById("id_first_name").autofocus;
+  $("#id_first_name").attr("autofocus", true);
+  $("#id_email").on("keyup", function () {
+    console.log(this.value);
+      $("#id_username").val(this.value);
+  });
 </script>
 
 {% endblock %}

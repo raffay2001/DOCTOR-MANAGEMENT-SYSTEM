@@ -17,16 +17,20 @@
                         Quia fugiat sit
                         in iste officiis commodi quidem hic quas.</p>
                 </div>
+                <br>
 
                 <div class="row">
 
                     {% for doctor in doctors %}
-                    <div class="col-lg-6">
-                        <div class="pb-2 member d-flex align-items-start">
+                    <div class="col-lg-6 mb-4">
+                        <div class="pb-2 my-shadow member d-flex align-items-start">
                             <div class="pic"><img src="media/{{ doctor.user.get_profile_picture }}"
                                     class="img-fluid" alt=""></div>
                             <div class="member-info mb-0">
-                                <h4>{{ doctor.user.get_full_name }}</h4>
+                                <a href="{% url 'application:doctor' doctor.id %}">
+                                    <h4>{{ doctor.user.get_full_name }}</h4>
+                                </a>
+
                                 <span>{{ doctor.designation }}</span>
                                 <p>{{ doctor.tagline }}</p>
                                 <div class="social">

@@ -2,37 +2,59 @@
 {% load static %}
 
 {% block content %}
-
+    <button type="button" name="" id="my-btn" data-toggle="modal" data-target="#submit-appointment-modal" style="height: 1px;" class="btn btn-primary btn-block">Click me</button>
 
     <!-- Button trigger modal -->
-    <div class="modal fade" id="view-modal">
-        <div class="modal-dialog modal-xl">
+    <div class="modal fade" id="submit-appointment-modal">
+        <div class="modal-dialog">
           <div class="modal-content">
           
             <!-- Modal Header -->
             <div class="modal-header">
-              <h4 class="modal-title">Your availability</h4>
-              <i class="material-icons mk-pointer cancel-button" data-dismiss="modal" aria-label="Close">clear</i>
+              <h4 class="modal-title">Confirm appointment</h4>
+              <i class="material-icons mk-pointer cancel-button appointment-modal-cancel-button" data-dismiss="modal">clear</i>
               <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
             </div>
             
             <!-- Modal body -->
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-sm-12">
-                        <div class="border my-shadow p-3 m-0 radius-10">
-                            <div id="picker"></div>
-                        </div>          
+            <form action="{% url 'application:confirm_appointment' %}" method="post">
+                {% csrf_token %}
+                
+                    <div class="modal-body">
+
+                        <div>
+                            <div class="form-group mb-3">
+                            <label for="" class="text-secondary">Subject</label>
+                            <input type="text" class="form-control mt-2" name="subject" placeholder="" required>
+                            </div>
+
+                            <div class="form-group mb-3">
+                            <label for="" class="text-secondary">Description</label>
+                            <textarea class="form-control  mt-2" name="description" rows="3" placeholder="Explain your health, issues or problems!" required></textarea>
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label for="" class="text-secondary">Appoitment date & time</label>
+                                <div class="mt-2">
+                                    <span class="badge badge-pill badge-primary bg-secondary text-lg mx-1" style="font-size:18px; font-weight: 500;" id="day-holder"></span>
+                                    <span class="badge badge-pill badge-primary bg-secondary text-lg mx-1" style="font-size:18px; font-weight: 500;" id="date-holder"></span>
+                                    <span class="badge badge-pill badge-primary bg-secondary text-lg mx-1" style="font-size:18px; font-weight: 500;" id="time-holder"></span>
+                                </div>
+
+                                <input type="hidden" id="input-slot" name="date-time">
+
+                            </div>
+
+                        </div>
+                    
                     </div>
-                </div>
-              
-                <br>
-            </div>
-            
-            <!-- Modal footer -->
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
+                    
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Confirm booking</button>
+                    </div>
+
+            </form>
             
           </div>
         </div>
@@ -172,179 +194,53 @@
                     <div class="doc-desc-head col-md-12 col-12">
                         <div class="p-1 doc-info">
                             <div class="row mt-3">
-                                <div class="col-sm-6">
+                                <div class="col-sm-12">
                                     <div>
-                                        <h4 class="my-0" style="color: #2c4964;">
-                                            Your Appointements</h4>
+                                        <h4 class="my-0  mb-4" style="color: #2c4964;">
+                                            Book your appointment</h4>
+
+                                        {% if user.user_type == 'doctor' and availability %}
+                                        <div class="alert alert-warning radius-10 my-2" role="alert">
+                                            Ops! Since you are a registered doctor, you cannot book appointment, Refer this doctor instead!
+                                        </div>
+                                        {% endif %}
+
+                                        <div id="availability-warning">
+                                            {% if doctor.user != user %}
+                                                <div class="alert alert-warning radius-10 my-2" role="alert">
+                                                    This doctor is not available right now!
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                                                             
+
                                     </div>
                                 </div>
 
-                                <div class="col-sm-6 d-flex justify-content-end align-items-center">
-                                   
-                                    <div class="form-group">
-                                      <select class="form-control" name="" id="">
-                                        <option value="0">Scheduled</option>
-                                        <option value="1">Completed</option>
-                                        <option value="2">Delay</option>
-                                      </select>
-                                    </div>
-                                </div>
+                              
                             </div>
 
                            
+                            <div class="row mt-2">
+                                <div class="col-sm-12">
+                                    <div class="border my-shadow p-3 m-0 radius-10">
+                                        <div id="picker"></div>
+                                    </div>          
+                                </div>
 
-                            <div class="p-2 mt-3">
+                            </div>
+                         
+
+                            <div class="p-0 mt-3 px-3">
+
+
                                 
                                 <!-- <div style="margin: 10rem 0 10rem 0;"  id="color-calendar"></div> -->
-                             
+
     
-                                <div style="border-radius: 12px;" class="border my-shadow row appointment mb-4">
-
-                                    <div class="d-flex align-items-center col-md-6 col-12 p-1">
-                                        <div class="p-1">
-                                            <img src="{% static 'assets/img/profile_pic_icon.jpg' %}" alt="profile-pic"
-                                                class="pat-img img-fluid">
-                                        </div>
-
-                                        <div class="p-1">
-                                            <h5 class="p-0 m-0 mb-2 text-primary">Micheal Ducket</h5>
-                                            <h6 class="p-0 m-0 d-flex align-items-center" style="font-family:verdana; font-size:15px;">
-                                                <i class="material-icons mr-3"  style="font-size:15px;">phone</i>
-                                                &nbsp;03125465489
-                                            </h6>
-                                        </div>
-
-                                    </div>
 
 
-                                    <div class="d-flex align-items-center col-md-3 col-12 p-1">
-                                        <div>
-                                            <span class="badge badge-pill badge-primary bg-late mb-2">Delayed</span>  <br>
-                                            May 07, 2021 -
-                                            06:03 pm
-                                        </div>
-                                       
-
-                                        
-
-                                    </div>
-
-
-                                    <div class="d-flex justify-content-end col-md-3 col-12">
-                                        <!-- <div class="p-0">
-                                            <h5 style="color: #2c4964; font-weight: 600;" class="p-0 m-0">Appointement
-                                                Status</h5>
-                                        </div> -->
-
-                                        <div class="btn-group" role="group"
-                                            aria-label="Basic outlined example">
-                                            <button type="button" class="btn btn-outline-primary">Mark as
-                                                Done</button>
-                                            <!-- <button type="button" class="btn btn-outline-secondary">Delayed</button>
-                                            <button type="button" class="btn btn-outline-secondary">Right</button> -->
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                                <div style="border-radius: 12px;" class="border my-shadow row appointment mb-4">
-
-                                    <div class="d-flex align-items-center col-md-6 col-12 p-1">
-                                        <div class="p-1">
-                                            <img src="{% static 'assets/img/profile_pic_icon.jpg' %}" alt="profile-pic"
-                                                class="pat-img img-fluid">
-                                        </div>
-
-                                        <div class="p-1">
-                                            <h5 class="p-0 m-0 mb-2 text-primary">Micheal Ducket</h5>
-                                            <h6 class="p-0 m-0 d-flex align-items-center" style="font-family:verdana; font-size:15px;">
-                                                <i class="material-icons mr-3"  style="font-size:15px;">phone</i>
-                                                &nbsp;03125465489
-                                            </h6>
-                                        </div>
-
-                                    </div>
-
-
-                                    <div class="d-flex align-items-center col-md-3 col-12 p-1">
-                                        <div>
-                                            <span class="badge badge-pill badge-primary bg-scheduled mb-2">Scheduled</span>  <br>
-                                            May 07, 2021 -
-                                            06:03 pm
-                                        </div>
-                                       
-
-                                        
-
-                                    </div>
-
-
-                                    <div class="d-flex justify-content-end col-md-3 col-12">
-                                        <!-- <div class="p-0">
-                                            <h5 style="color: #2c4964; font-weight: 600;" class="p-0 m-0">Appointement
-                                                Status</h5>
-                                        </div> -->
-
-                                        <div class="btn-group" role="group"
-                                            aria-label="Basic outlined example">
-                                            <button type="button" class="btn btn-outline-primary">Mark as
-                                                Done</button>
-                                            <!-- <button type="button" class="btn btn-outline-secondary">Delayed</button>
-                                            <button type="button" class="btn btn-outline-secondary">Right</button> -->
-                                        </div>
-                                    </div>
-
-                                </div>
-
-
-                                <div style="border-radius: 12px;" class="border my-shadow row appointment mb-4">
-
-                                    <div class="d-flex align-items-center col-md-6 col-12 p-1">
-                                        <div class="p-1">
-                                            <img src="{% static 'assets/img/profile_pic_icon.jpg' %}" alt="profile-pic"
-                                                class="pat-img img-fluid">
-                                        </div>
-
-                                        <div class="p-1">
-                                            <h5 class="p-0 m-0 mb-2 text-primary">Micheal Ducket</h5>
-                                            <h6 class="p-0 m-0 d-flex align-items-center" style="font-family:verdana; font-size:15px;">
-                                                <i class="material-icons mr-3"  style="font-size:15px;">phone</i>
-                                                &nbsp;03125465489
-                                            </h6>
-                                        </div>
-
-                                    </div>
-
-
-                                    <div class="d-flex align-items-center col-md-3 col-12 p-1">
-                                        <div>
-                                            <span class="badge badge-pill badge-primary bg-scheduled mb-2">Scheduled</span>  <br>
-                                            May 07, 2021 -
-                                            06:03 pm
-                                        </div>
-                                       
-
-                                        
-
-                                    </div>
-
-
-                                    <div class="d-flex justify-content-end col-md-3 col-12">
-                                        <!-- <div class="p-0">
-                                            <h5 style="color: #2c4964; font-weight: 600;" class="p-0 m-0">Appointement
-                                                Status</h5>
-                                        </div> -->
-
-                                        <div class="btn-group" role="group"
-                                            aria-label="Basic outlined example">
-                                            <button type="button" class="btn btn-outline-primary">Mark as
-                                                Done</button>
-                                            <!-- <button type="button" class="btn btn-outline-secondary">Delayed</button>
-                                            <button type="button" class="btn btn-outline-secondary">Right</button> -->
-                                        </div>
-                                    </div>
-
-                                </div>
+                                
                                 
                             </div>
 
@@ -356,11 +252,9 @@
     </div>
 
 
-
-
-
-    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <!-- <script src="//code.jquery.com/jquery-1.11.0.min.js"></script> -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
     <script type="text/javascript" src="{% static 'assets/calendar/js/mark-your-calendar.js' %}"></script>
 
     
@@ -453,8 +347,11 @@
         }
 
 
+        console.log(availability);
 
         if(availability != "None"){
+            $("#availability-warning").hide();
+
 
             steps_attr[1].selected = duration = parseInt("{{ availability.duration }}");
             steps_attr[3].start_time = start_time = "{{ availability.get_start_time }}";
@@ -465,34 +362,6 @@
             // get_slots(start_time, end_time, duration);
             // console.log(all_week_slots);
             avail = all_week_slots;
-
-            // Generate calendar
-            (function($) {
-
-            // console.log(avail);
-
-            $('#picker').markyourcalendar({
-                availability: avail,
-                startDate: new Date(),
-                // onClick: function(ev, data) {
-                //     // data is a list of datetimes
-                //     console.log(data);
-                //     if (data.length > 0) {
-                //         var d = data[0].split(' ')[0];
-                //         var t = data[0].split(' ')[1];
-                //         var am_pm = data[0].split(' ')[2];
-                //         console.log(d);
-                //         console.log(t);
-                //         console.log(am_pm);
-                //         $('#selected-date').html(d);
-                //         $('#selected-time').html(t);
-                //     }  
-                // },
-                onClickNavigator: function(ev, instance) {
-                    instance.setAvailability(avail);
-                }
-                });
-            })(jQuery);
 
 
             let step_2_options = steps_attr[2].options;
@@ -505,7 +374,59 @@
 
 
             
+        }else{
+            $("#availability-warning").show();
         }
+
+
+
+
+
+        // Generate calendar
+        (function($) {
+
+            var selected_date_time = null;
+
+            // console.log(avail);
+
+            $('#picker').markyourcalendar({
+                availability: avail,
+                startDate: new Date(),
+                onClick: function(ev, data) {
+                    // data is a list of datetimes
+                    // console.log(data);
+                    if (data.length > 0) {
+                        $("#input-slot").val(data);
+                    }
+                    
+                    const days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+                    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+                    data = $("#input-slot").val();
+                    var d = $("#input-slot").val().split(' ')[0];
+                    var t = $("#input-slot").val().split(' ')[1];
+                    var am_pm = $("#input-slot").val().split(' ')[2];
+                    // console.log(d, t, am_pm);
+
+                    var my_date = new Date(d);
+                    
+                    let date_to_show = `${months[my_date.getMonth()]} ${my_date.getDate()}, ${my_date.getFullYear()}`
+                    let day_to_show = days[my_date.getDay()];
+
+                    $("#date-holder").text(date_to_show);
+                    $("#day-holder").text(day_to_show);
+                    $("#time-holder").text(`${t} ${am_pm}`);
+                    console.log(date_to_show);
+                    console.log(day_to_show);
+                    console.log(t, am_pm);
+
+                    $("#my-btn").click();
+                },
+                onClickNavigator: function(ev, instance) {
+                    instance.setAvailability(avail);
+                }
+            });
+        })(jQuery);
 
 
                 
@@ -698,8 +619,9 @@
         });
 
 
-
-    
+        $(".appointment-modal-cancel-button").on("click", function () {
+            console.log("haha"); 
+        });
  
     
 
