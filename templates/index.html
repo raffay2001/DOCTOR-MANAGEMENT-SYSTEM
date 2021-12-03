@@ -7,19 +7,19 @@
     <div class="container">
 
       {% if role == 'pt' %}
-      <h1>Hey, {{ user.first_name }} {{ user.last_name }} <br> Welcome to Medilab</h1>
+      <h1>Hey, {{ user.first_name }} {{ user.last_name }} <br> Welcome to CovidCare</h1>
       {% endif %}
 
       {% if role == 'dc' %}
-      <h1>Hey, Dr. {{ user.first_name }} {{ user.last_name }} <br> Welcome to Medilab</h1>
+      <h1>Hey, Dr. {{ user.first_name }} {{ user.last_name }} <br> Welcome to CovidCare</h1>
       {% endif %}
 
       {% if role == False %}
-      <h1>Welcome to Medilab</h1>
+      <h1>Welcome to CovidCare</h1>
       {% endif %}
 
-      <h2>We are team of talented designers making websites with Bootstrap</h2>
-      <a href="#about" class="btn-get-started scrollto">Get Started</a>
+      <h2>Register now to book appointments <br> with the most trusted doctors!</h2>
+      <a href="{% url 'application:sign_in' %}" class="btn-get-started scrollto">Get Started</a>
     </div>
   </section><!-- End Hero -->
 
@@ -32,15 +32,14 @@
         <div class="row">
           <div class="col-lg-4 d-flex align-items-stretch">
             <div class="content">
-              <h3>Why Choose Medilab?</h3>
+              <h3>Why Choose CovidCare?</h3>
               <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-                dolore magna aliqua. Duis aute irure dolor in reprehenderit
-                Asperiores dolores sed et. Tenetur quia eos. Autem tempore quibusdam vel necessitatibus optio ad
-                corporis.
+                CovidCare is an online system providing a facility to set & book appointments with the most trusted doctors
+                without actually visiting their clinic. Here, doctors set their availablity and patients, after registration
+                can see their availability and book appointments accordingly.
               </p>
               <div class="text-center">
-                <a href="#" class="more-btn">Learn More <i class="bx bx-chevron-right"></i></a>
+                <a href="{% url 'application:sign_up' %}" class="more-btn">Register now <i class="bx bx-chevron-right"></i></a>
               </div>
             </div>
           </div>
@@ -50,22 +49,22 @@
                 <div class="col-xl-4 d-flex align-items-stretch">
                   <div class="icon-box mt-4 mt-xl-0">
                     <i class="bx bx-receipt"></i>
-                    <h4>Corporis voluptates sit</h4>
-                    <p>Consequuntur sunt aut quasi enim aliquam quae harum pariatur laboris nisi ut aliquip</p>
+                    <h4>Register</h4>
+                    <p>By providing some information about yourself, you can register easily.</p>
                   </div>
                 </div>
                 <div class="col-xl-4 d-flex align-items-stretch">
                   <div class="icon-box mt-4 mt-xl-0">
                     <i class="bx bx-cube-alt"></i>
-                    <h4>Ullamco laboris ladore pan</h4>
-                    <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt</p>
+                    <h4>Book appointments</h4>
+                    <p>See doctors profiles by clicking on any doctor's card.</p>
                   </div>
                 </div>
                 <div class="col-xl-4 d-flex align-items-stretch">
                   <div class="icon-box mt-4 mt-xl-0">
                     <i class="bx bx-images"></i>
-                    <h4>Labore consequatur</h4>
-                    <p>Aut suscipit aut cum nemo deleniti aut omnis. Doloribus ut maiores omnis facere</p>
+                    <h4>Get consulancy</h4>
+                    <p>Go and meet the doctor, appointment will be done.</p>
                   </div>
                 </div>
               </div>
@@ -87,30 +86,26 @@
 
           <div
             class="col-xl-7 col-lg-6 icon-boxes d-flex flex-column align-items-stretch justify-content-center py-5 px-lg-5">
-            <h3>Enim quis est voluptatibus aliquid consequatur fugiat</h3>
-            <p>Esse voluptas cumque vel exercitationem. Reiciendis est hic accusamus. Non ipsam et sed minima temporibus
-              laudantium. Soluta voluptate sed facere corporis dolores excepturi. Libero laboriosam sint et id nulla
-              tenetur. Suscipit aut voluptate.</p>
+            <h3>About us</h3>
+            <p>Covid care management is tailored for seniors and individuals with serious underlying medical conditions. Covid and Influenza are both respiratory illnesses. However, Covid is caused by infection with a coronavirus, and Influenza is caused by infection with influenza viruses. The concern is that symptoms of Influenza and Covid are concerningly similar in nature and people can be infected with both Influenza and Covid at the same time - and have symptoms from both illnesses. Common symptoms of both illnesses include are fever; cough; shortness of breath or difficulty breathing; fatigue; sore throat; muscle pain; change in or loss of taste or smell; and headache. Transmission of both illnesses can be spread from person-to-person between people who are in close contact with one another and both illnesses can be spread to other people before the symptoms appear.
+              The product we are asking you to throw your weight behind provides a wide range of services to seniors from lab work to virtual doctor appointments to food and prescription delivery.</p>
 
             <div class="icon-box">
               <div class="icon"><i class="bx bx-fingerprint"></i></div>
-              <h4 class="title"><a href="">Lorem Ipsum</a></h4>
-              <p class="description">Voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint
-                occaecati cupiditate non provident</p>
+              <h4 class="title"><a href="">Register</a></h4>
+              <p class="description">By providing some information about yourself, you can register easily.</p>
             </div>
 
             <div class="icon-box">
               <div class="icon"><i class="bx bx-gift"></i></div>
-              <h4 class="title"><a href="">Nemo Enim</a></h4>
-              <p class="description">At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis
-                praesentium voluptatum deleniti atque</p>
+              <h4 class="title"><a href="">Book appointments</a></h4>
+              <p class="description">See doctors profiles by clicking on any doctor's card.</p>
             </div>
 
             <div class="icon-box">
               <div class="icon"><i class="bx bx-atom"></i></div>
-              <h4 class="title"><a href="">Dine Pad</a></h4>
-              <p class="description">Explicabo est voluptatum asperiores consequatur magnam. Et veritatis odit. Sunt aut
-                deserunt minus aut eligendi omnis</p>
+              <h4 class="title"><a href="">Get consultancy</a></h4>
+              <p class="description">Go and meet the doctor, appointment will be done.</p>
             </div>
 
           </div>
@@ -172,57 +167,55 @@
 
         <div class="section-title">
           <h2>Services</h2>
-          <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint
-            consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit
-            in iste officiis commodi quidem hic quas.</p>
+          <p></p>
         </div>
 
         <div class="row">
           <div class="col-lg-4 col-md-6 d-flex align-items-stretch">
             <div class="icon-box">
               <div class="icon"><i class="fas fa-heartbeat"></i></div>
-              <h4><a href="">Lorem Ipsum</a></h4>
-              <p>Voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi</p>
+              <h4><a href="">Appointment</a></h4>
+              <p>Doctors set availability, & patients book appointment within the system</p>
             </div>
           </div>
 
           <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-md-0">
             <div class="icon-box">
               <div class="icon"><i class="fas fa-pills"></i></div>
-              <h4><a href="">Sed ut perspiciatis</a></h4>
-              <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore</p>
+              <h4><a href="">Profile management</a></h4>
+              <p>Patients and doctors can see and manage their profile</p>
             </div>
           </div>
 
           <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-lg-0">
             <div class="icon-box">
               <div class="icon"><i class="fas fa-hospital-user"></i></div>
-              <h4><a href="">Magni Dolores</a></h4>
-              <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia</p>
+              <h4><a href="">Clinic management</a></h4>
+              <p>Clinic can be added while adding the doctor from admin side</p>
             </div>
           </div>
 
           <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4">
             <div class="icon-box">
               <div class="icon"><i class="fas fa-dna"></i></div>
-              <h4><a href="">Nemo Enim</a></h4>
-              <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis</p>
+              <h4><a href="">Reviews management</a></h4>
+              <p>Reviews enhance the credibility of doctors, patients see them</p>
             </div>
           </div>
 
           <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4">
             <div class="icon-box">
               <div class="icon"><i class="fas fa-wheelchair"></i></div>
-              <h4><a href="">Dele cardo</a></h4>
-              <p>Quis consequatur saepe eligendi voluptatem consequatur dolor consequuntur</p>
+              <h4><a href="">Authentication</a></h4>
+              <p>Authentication is added to ensure the security, Its secure.</p>
             </div>
           </div>
 
           <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4">
             <div class="icon-box">
               <div class="icon"><i class="fas fa-notes-medical"></i></div>
-              <h4><a href="">Divera don</a></h4>
-              <p>Modi nostrum vel laborum. Porro fugit error sit minus sapiente sit aspernatur</p>
+              <h4><a href="">Free profile</a></h4>
+              <p>You can build up your free E-profile, appointment manages here.</p>
             </div>
           </div>
 
@@ -307,9 +300,7 @@
 
         <div class="section-title">
           <h2>Departments</h2>
-          <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint
-            consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit
-            in iste officiis commodi quidem hic quas.</p>
+          <p></p>
         </div>
 
         <div class="row">
@@ -421,80 +412,52 @@
 
         <div class="section-title">
           <h2>Doctors</h2>
-          <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint
-            consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit
-            in iste officiis commodi quidem hic quas.</p>
+          <p></p>
         </div>
 
         <div class="row">
 
-          <div class="col-lg-6">
-            <div class="member d-flex align-items-start">
-              <div class="pic"><img src="{% static 'assets/img/doctors/doctors-1.jpg' %}" class="img-fluid" alt=""></div>
-              <div class="member-info">
-                <h4>Walter White</h4>
-                <span>Chief Medical Officer</span>
-                <p>Explicabo voluptatem mollitia et repellat qui dolorum quasi</p>
-                <div class="social">
-                  <a href=""><i class="ri-twitter-fill"></i></a>
-                  <a href=""><i class="ri-facebook-fill"></i></a>
-                  <a href=""><i class="ri-instagram-fill"></i></a>
-                  <a href=""> <i class="ri-linkedin-box-fill"></i> </a>
-                </div>
-              </div>
-            </div>
-          </div>
+          <div class="row">
 
-          <div class="col-lg-6 mt-4 mt-lg-0">
-            <div class="member d-flex align-items-start">
-              <div class="pic"><img src="{% static 'assets/img/doctors/doctors-2.jpg' %}" class="img-fluid" alt=""></div>
-              <div class="member-info">
-                <h4>Sarah Jhonson</h4>
-                <span>Anesthesiologist</span>
-                <p>Aut maiores voluptates amet et quis praesentium qui senda para</p>
-                <div class="social">
-                  <a href=""><i class="ri-twitter-fill"></i></a>
-                  <a href=""><i class="ri-facebook-fill"></i></a>
-                  <a href=""><i class="ri-instagram-fill"></i></a>
-                  <a href=""> <i class="ri-linkedin-box-fill"></i> </a>
-                </div>
-              </div>
-            </div>
-          </div>
+            {% for doctor in doctors %}
+            <div class="col-lg-6 mb-4">
+                <div class="pb-2 my-shadow member d-flex align-items-start">
+                    <div class="pic"><img src="media/{{ doctor.user.get_profile_picture }}"
+                            class="img-fluid" alt=""></div>
+                    <div class="member-info mb-0">
+                        <a href="{% url 'application:doctor' doctor.id %}">
+                            <h4>{{ doctor.user.get_full_name }}</h4>
+                        </a>
 
-          <div class="col-lg-6 mt-4">
-            <div class="member d-flex align-items-start">
-              <div class="pic"><img src="{% static 'assets/img/doctors/doctors-3.jpg' %}" class="img-fluid" alt=""></div>
-              <div class="member-info">
-                <h4>William Anderson</h4>
-                <span>Cardiology</span>
-                <p>Quisquam facilis cum velit laborum corrupti fuga rerum quia</p>
-                <div class="social">
-                  <a href=""><i class="ri-twitter-fill"></i></a>
-                  <a href=""><i class="ri-facebook-fill"></i></a>
-                  <a href=""><i class="ri-instagram-fill"></i></a>
-                  <a href=""> <i class="ri-linkedin-box-fill"></i> </a>
-                </div>
-              </div>
-            </div>
-          </div>
+                        <span>{{ doctor.designation }}</span>
+                        <p>{{ doctor.tagline }}</p>
+                        <div class="social">
+                            {% if doctor.social_links %}
 
-          <div class="col-lg-6 mt-4">
-            <div class="member d-flex align-items-start">
-              <div class="pic"><img src="{% static 'assets/img/doctors/doctors-4.jpg' %}" class="img-fluid" alt=""></div>
-              <div class="member-info">
-                <h4>Amanda Jepson</h4>
-                <span>Neurosurgeon</span>
-                <p>Dolorum tempora officiis odit laborum officiis et et accusamus</p>
-                <div class="social">
-                  <a href=""><i class="ri-twitter-fill"></i></a>
-                  <a href=""><i class="ri-facebook-fill"></i></a>
-                  <a href=""><i class="ri-instagram-fill"></i></a>
-                  <a href=""> <i class="ri-linkedin-box-fill"></i> </a>
+                            <div class="p-1 d-flex ">
+                                {% for social_link in doctor.social_links.get_list %}
+                                <div class="mx-1">
+                                    <a href="{{ social_link.1 }}" class="twitter" target="_blank"><i class="{{ social_link.0 }} ml-3"></i></a>
+                                </div>
+                                {% endfor %}
+
+
+                                
+                            </div>
+                           
+                            {% endif %}
+                            <!-- <a href=""><i class="ri-twitter-fill"></i></a>
+                            <a href=""><i class="ri-facebook-fill"></i></a>
+                            <a href=""><i class="ri-instagram-fill"></i></a>
+                            <a href=""> <i class="ri-linkedin-box-fill"></i> </a> -->
+                        </div>
+                    </div>
                 </div>
-              </div>
             </div>
-          </div>
+            {% endfor %}
+
+        </div
+
 
         </div>
 
@@ -686,9 +649,6 @@
 
         <div class="section-title">
           <h2>Gallery</h2>
-          <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint
-            consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit
-            in iste officiis commodi quidem hic quas.</p>
         </div>
       </div>
 

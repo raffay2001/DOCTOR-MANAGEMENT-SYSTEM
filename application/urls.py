@@ -13,7 +13,9 @@ urlpatterns = [
     path('doctor/<doctor_id>', views.single_doctor, name='doctor'),
     path('profile', views.profile, name='profile'),
     path('save_availability', views.save_availability, name="save_availability"),
-    path('confirm_appointment', views.confirm_appointment, name="confirm_appointment")
+    path('confirm_appointment', views.confirm_appointment, name="confirm_appointment"),
+    path('mark_as_done/<appointment_id>', views.mark_as_done, name="mark_as_done"),
+    
 ]
 
 

@@ -1,0 +1,127 @@
+{% extends 'inc/main_base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+
+    <!-- DOCTOR PROFILE SECTION  -->
+    <div class="container pt-5 mt-5 pb-5 mb-5">
+        <div class="row pt-3 pb-3">
+            <!-- Personal Info and Description Section  -->
+            <div class="col-md-4 col-12 pt-2 pb-2">
+                <!-- Personal Info Section  -->
+                
+
+
+                <div>
+
+                                    
+                    <div style="padding: 2rem 1rem 1rem 1rem;" class="row">
+                        <div class="border doc-info-head col-md-12 col-12 my-shadow">
+                            <div class="d-flex justify-content-center p-1 doc-img mt-4">
+                                <img src="media/{{ user.get_profile_picture }}" style="border-radius: 100%;" alt="profile-pic"
+                                    class="doc-img img-fluid">
+                            </div>
+
+
+                            <div class="text-center my-0 mb-4 mt-3">
+                                <h4>{{ user.get_full_name }}</h4>
+                                <h6>{{ user.email }}</h6>
+                            </div>
+
+                       
+
+                            <hr class="mx-3">
+
+                            <div class="p-2 doc-info">
+
+                                <div class="p-1">
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <h6><span style="font-weight: 600; color: #2c4964;">Phone</span></h6>
+                                        </div>
+
+                                        <div class="col-sm-8 d-flex justify-content-end text-right">
+                                            <h6 class="text-right"><span>+{{ user.phone }}</span></h6>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+
+                                <div class="p-1">
+                                    <div class="row">
+                                        <div class="col-sm-5">
+                                            <h6><span style="font-weight: 600; color: #2c4964;">Member since</span></h6>
+                                        </div>
+
+                                        <div class="col-sm-7 d-flex justify-content-end text-right">
+                                            <h6 class="text-right"><span>{{ user.date_joined }}</span></h6>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+
+                                
+                            
+                            </div>
+
+                        
+
+
+                        </div>
+                    </div>
+
+                
+
+
+                </div>
+            </div>
+
+
+            <!-- Appointments Section  -->
+            <div class="col-md-8 col-12 pt-2 pb-2">
+                <div class="row mt-3">
+                    <div class="doc-desc-head col-md-12 col-12">
+                        <div class="p-1 doc-info">
+                            <div class="row mt-3">
+                                <div class="col-sm-6">
+                                    <div>
+                                        <h4 class="my-0" style="color: #2c4964;">
+                                            Your Appointements</h4>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6 d-flex justify-content-end align-items-center">
+                                   
+                                    <!-- <div class="form-group">
+                                      <select class="form-control" name="" id="">
+                                        <option value="0">Scheduled</option>
+                                        <option value="1">Completed</option>
+                                        <option value="2">Delay</option>
+                                      </select>
+                                    </div> -->
+                                </div>
+                            </div>
+
+                           
+
+                            <div class="p-2 mt-3">
+                                {% include 'inc/appointment-cards.html' %}
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+{% endblock %}

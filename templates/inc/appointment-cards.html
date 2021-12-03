@@ -1,0 +1,82 @@
+{% load static %}
+
+
+{% if not appointments %}
+
+<h2>No appointment scheduled right now!</h2>
+<!-- <div class="alert alert-warning radius-10" role="alert">
+    
+</div> -->
+
+{% endif %}
+
+<!-- <div style="margin: 10rem 0 10rem 0;"  id="color-calendar"></div> -->
+{% for appointment in appointments %}
+
+<div style="border-radius: 12px;" class="border my-shadow row appointment mb-4">
+
+{% if user.user_type == 'patient' %}
+<div class="d-flex align-items-center col-md-5 col-12 p-1">
+    <div class="p-2">
+        <img src="media/{{ appointment.doctor.user.get_profile_picture }}" alt="profile-pic"
+            class="pat-img img-fluid">
+    </div>
+
+    <div class="p-1 px-2">
+        <a href="{% url 'application:doctor' appointment.doctor.id %}">
+            <h5 class="p-0 m-0 mb-2 text-primary">Dr. {{ appointment.doctor.user.get_full_name }}</h5>
+        </a>
+        <h6 class="p-0 m-0 d-flex align-items-center" style="font-family:verdana; font-size:15px;">
+            <i class="material-icons mr-3"  style="font-size:15px;">phone</i>
+            &nbsp;{{ appointment.doctor.user.phone }}
+        </h6>
+    </div>
+</div>
+
+{% else %}
+<div class="d-flex align-items-center col-md-5 col-12 p-1">
+    <div class="p-2">
+        <img src="media/{{ appointment.patient.user.get_profile_picture }}" alt="profile-pic"
+            class="pat-img img-fluid">
+    </div>
+
+    <div class="p-1 px-2">
+        <h5 class="p-0 m-0 mb-2 text-primary">{{ appointment.patient.user.get_full_name }}</h5>
+        <h6 class="p-0 m-0 d-flex align-items-center" style="font-family:verdana; font-size:15px;">
+            <i class="material-icons mr-3"  style="font-size:15px;">phone</i>
+            &nbsp;{{ appointment.patient.user.phone }}
+        </h6>
+    </div>
+</div>
+
+
+{% endif %}
+
+
+<div class="d-flex align-items-center col-md-5 col-12 p-1">
+    <div>
+        <span class="badge badge-pill badge-primary bg-{{ appointment.get_status }} mb-2">{{ appointment.get_status }}</span>  <br>
+        {{ appointment.date_time.date }} - From <span class="border p-1 radius-10 bg-light-grey">{{ appointment.get_start_time }}</span> to <span class="border p-1 radius-10 bg-light-grey">{{ appointment.get_end_time }}</u> 
+    </div>
+
+
+</div>
+
+
+<div class="d-flex justify-content-end col-md-2 col-12 align-items-center pr-2">
+    {% if appointment.doctor.user == user %}
+        <div class="btn-group" role="group">
+            <a href="{% url 'application:mark_as_done' appointment.id %}">
+                <button type="button" class="btn btn-outline-primary">Done</button>
+            </a>
+            <!-- <button type="button" class="btn btn-outline-secondary">Delayed</button>
+            <button type="button" class="btn btn-outline-secondary">Right</button> -->
+        </div>
+    {% endif %}
+
+</div>
+
+</div>
+
+{% endfor %}
+

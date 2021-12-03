@@ -17,7 +17,7 @@
             </div>
             
             <!-- Modal body -->
-            <form action="{% url 'application:confirm_appointment' %}" method="post">
+            <form action="" method="post">
                 {% csrf_token %}
                 
                     <div class="modal-body">
@@ -204,6 +204,12 @@
                                             Ops! Since you are a registered doctor, you cannot book appointment, Refer this doctor instead!
                                         </div>
                                         {% endif %}
+
+                                        {% for message in messages %}
+                                            <div class="alert alert-{% if message.level == 30 %}warning{% elif message.level == 25 %}success{% else %}danger{% endif %} radius-10 my-2" role="alert">
+                                                {{ message }}
+                                            </div>
+                                        {% endfor %}
 
                                         <div id="availability-warning">
                                             {% if doctor.user != user %}
@@ -395,32 +401,34 @@
                 onClick: function(ev, data) {
                     // data is a list of datetimes
                     // console.log(data);
-                    if (data.length > 0) {
-                        $("#input-slot").val(data);
-                    }
-                    
-                    const days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-                    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+                    {% if user.user_type == 'patient' %}
+                        if (data.length > 0) {
+                            $("#input-slot").val(data);
+                        }
+                        
+                        const days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+                        const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
-                    data = $("#input-slot").val();
-                    var d = $("#input-slot").val().split(' ')[0];
-                    var t = $("#input-slot").val().split(' ')[1];
-                    var am_pm = $("#input-slot").val().split(' ')[2];
-                    // console.log(d, t, am_pm);
+                        data = $("#input-slot").val();
+                        var d = $("#input-slot").val().split(' ')[0];
+                        var t = $("#input-slot").val().split(' ')[1];
+                        var am_pm = $("#input-slot").val().split(' ')[2];
+                        // console.log(d, t, am_pm);
 
-                    var my_date = new Date(d);
-                    
-                    let date_to_show = `${months[my_date.getMonth()]} ${my_date.getDate()}, ${my_date.getFullYear()}`
-                    let day_to_show = days[my_date.getDay()];
+                        var my_date = new Date(d);
+                        
+                        let date_to_show = `${months[my_date.getMonth()]} ${my_date.getDate()}, ${my_date.getFullYear()}`
+                        let day_to_show = days[my_date.getDay()];
 
-                    $("#date-holder").text(date_to_show);
-                    $("#day-holder").text(day_to_show);
-                    $("#time-holder").text(`${t} ${am_pm}`);
-                    console.log(date_to_show);
-                    console.log(day_to_show);
-                    console.log(t, am_pm);
+                        $("#date-holder").text(date_to_show);
+                        $("#day-holder").text(day_to_show);
+                        $("#time-holder").text(`${t} ${am_pm}`);
+                        console.log(date_to_show);
+                        console.log(day_to_show);
+                        console.log(t, am_pm);
 
-                    $("#my-btn").click();
+                        $("#my-btn").click();
+                    {% endif %}
                 },
                 onClickNavigator: function(ev, instance) {
                     instance.setAvailability(avail);

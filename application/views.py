@@ -12,21 +12,24 @@ import calendar
 
 @login_required
 def confirm_appointment(request):
-    if request.method == "POST":
-        subject = request.POST.get("subject")
-        description = request.POST.get("description")
-        date_time = request.POST.get("date-time")
+    pass
 
-        for i, j in request.POST.items():
-            print(f"{i} => {j}")
+@login_required
+def mark_as_done(request, appointment_id):
+    appointment = Appointment.objects.filter(id = appointment_id)
+    if appointment.exists():
+        appointment = appointment[0]
+        if appointment.doctor.user == request.user:
+            appointment.status = 1
+            appointment.save()
 
-    return redirect("application:index")
-
+    return redirect("application:profile")
 
 # Create your views here.
 def index(request):
     context = {
-        'footer': True
+        'footer': True,
+        'doctors': Doctor.objects.all()
     }
     return render(request, 'index.html', context)
 
@@ -150,23 +153,32 @@ def get_appointments_details(availability):
 # FUCNTION FOR THE PROFILE PAGE OF THE DOCTOR 
 @login_required
 def profile(request):
-    doctor = request.user.get_profile()
-    context = {
-        'doctor': doctor,
-        'availability': None
-    }
+    profile = request.user.get_profile()
+    if request.user.user_type == "doctor":
+        context = {
+            'doctor': profile,
+            'availability': None
+        }
 
-    filter_query = Availability.objects.filter(user = doctor.user)
+        filter_query = Availability.objects.filter(user = profile.user)
+        
+        if filter_query.exists():
+            availability = filter_query[0]
+            result = get_appointments_details(availability)
+            context['all_week_slots'] = result['all_week_slots']
+            context['availability'] = result['availability']
+            context['appointments'] = Appointment.objects.filter(doctor = profile)
+
+        return render(request, 'doctor_profile.html', context)
     
-    if filter_query.exists():
-        availability = filter_query[0]
-        result = get_appointments_details(availability)
-        context['all_week_slots'] = result['all_week_slots']
-        context['availability'] = result['availability']
+    else:
+        context = {
+            'patient': profile,
+            'appointments': Appointment.objects.filter(patient = profile)
+        }
 
-    return render(request, 'doctor_profile.html', context)
-
-
+        return render(request, 'patient_profile.html', context)
+    
 # FUNCTION FOR SIGN-UP
 def sign_up(request):
     if request.user.is_authenticated:
@@ -185,8 +197,11 @@ def sign_up(request):
 
             form = CreateUserForm(form_data)
             if form.is_valid():
-                form.save()
+                new_user = form.save()
                 user_name = form.cleaned_data.get('first_name')
+
+                new_patient = Patient.objects.create(user = new_user)
+
                 messages.success(
                     request, f"Account for {user_name} has been successfully made")
                 return HttpResponseRedirect(reverse('application:sign_in'))
@@ -235,15 +250,50 @@ def sign_out(request):
 
 
 # FUNCTION FOR ALL DOCTORS PAGE 
+@login_required
 def doctors(request):
     context = {}
     all_doctors = Doctor.objects.all()
     context['doctors'] = all_doctors
     return render(request, 'doctors.html', context)
 
-
+@login_required
 def single_doctor(request, doctor_id):
     doctor = get_object_or_404(Doctor, pk=doctor_id)
+    # messages.success(request, "This slot has already been booked!")
+
+    if request.method == "POST":
+        subject = request.POST.get("subject")
+        description = request.POST.get("description")
+        date_time = request.POST.get("date-time")
+        date_time_object = datetime.strptime(f'{date_time}', '%Y-%m-%d %I:%M %p')
+
+        apppointment_filter_query = Appointment.objects.filter(doctor = doctor, date_time = date_time_object)
+
+        if apppointment_filter_query.exists():
+            messages.warning(request, "This slot has already been booked!")
+        else:
+            patient = request.user.get_profile()
+            previous_active_appointment = Appointment.objects.filter(patient = patient, doctor = doctor, status = 0)
+            if previous_active_appointment.exists():
+                messages.error(request, "You already have appointment booked with this doctor!")
+            else:
+                new_appointment = Appointment(
+                    doctor = doctor, 
+                    patient = patient,
+                    date_time = date_time_object,
+                    subject = subject,
+                    description = description
+                )
+                new_appointment.save()
+                
+                messages.success(request, "Your appointment has been confirmed, See you on time!")
+
+
+        print(date_time_object)
+        for i, j in request.POST.items():
+            print(f"{i} => {j}")
+
 
     if request.user == doctor.user:
         return redirect("application:profile")

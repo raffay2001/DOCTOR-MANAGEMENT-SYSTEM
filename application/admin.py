@@ -60,5 +60,6 @@ admin.site.register(Patient)
 admin.site.register(Nurse)
 admin.site.register(Day)
 admin.site.register(Availability)
+admin.site.register(Appointment)
 
 

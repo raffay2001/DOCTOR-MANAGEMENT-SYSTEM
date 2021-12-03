@@ -5,6 +5,12 @@ from django.conf import settings
 import os
 from django.utils.translation import ugettext_lazy as _
 import json
+from datetime import timedelta
+
+# python manage.py makemigrations
+# python manage.py migrate
+# python manage.py runserver
+
 
 
 # MODEL FOR USER 
@@ -142,3 +148,29 @@ class Nurse(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     works_under = models.ForeignKey(Doctor, on_delete=models.CASCADE)
     clinic = models.ForeignKey(Clinic, on_delete=models.CASCADE)
+
+
+# MODEL FOR THE APPOINTMENT 
+class Appointment(models.Model):
+    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
+    date_time = models.DateTimeField()
+    subject = models.CharField(max_length=50)
+    description = models.TextField(blank=True, null=True)
+    status = models.IntegerField(default=0)
+
+    def get_start_time(self):
+        return self.date_time.time()
+
+    def get_end_time(self):
+        availability_time = Availability.objects.get(user = self.doctor.user)
+        end_time = self.date_time + timedelta(minutes = availability_time.duration)
+        return end_time.time()
+
+    def get_status(self):
+        if self.status == 0:
+            return f'Scheduled'
+        elif self.status == 1:
+            return f'Completed'
+        elif self.status == -1:
+            return f'Delayed'

@@ -57,12 +57,16 @@ input:focus-within{
 }
 
 
-.bg-scheduled{
+.bg-Scheduled{
     background-color: #2c4964;
 }
 
-.bg-late{
+.bg-Late{
     background-color: #f74040;
+}
+
+.bg-Completed{
+    background-color: #089e30;
 }
 
 .badge{
@@ -109,4 +113,8 @@ input:focus-within{
 
 .border-100{
     border-radius: 100%;
+}
+
+.bg-light-grey{
+    background-color: #f7f7f7;
 }
